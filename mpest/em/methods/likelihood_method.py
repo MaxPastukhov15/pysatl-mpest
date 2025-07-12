@@ -23,16 +23,10 @@ class BayesEStep(AExpectation[EResult]):
 
     def __init__(self):
         """
-        Object constructor which initialiazing private flag which checks if sample is sorted
+        Object construcor for fields which checks if samples are sorted
         """
-        self._is_sorted = False 
-
-
-    def _set_is_sorted(self, flag: bool) -> None:
-        """
-        Setter for flag
-        """
-        _is_sorted =  flag
+        self._sorted_samples = None
+        self._last_samples_hash = None
 
 
     def step(self, problem: Problem) -> EResult:
@@ -43,11 +37,12 @@ class BayesEStep(AExpectation[EResult]):
         :return: Return active_samples, matrix with probabilities and problem.
         """
 
-        if not self._is_sorted:
-            samples = np.sort(problem.samples)
-            self._set_is_sorted(True)
-        else:
-            samples = problem.samples
+        current_hash = hash(problem.samples.tobytes())
+        if self._last_samples_hash != current_hash:
+            self._sorted_samples = np.sort(problem.samples)
+            self._last_samples_hash = current_hash
+        samples = self._sorted_samples
+
 
         mixture = problem.distributions
 
