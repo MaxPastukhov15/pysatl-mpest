@@ -13,7 +13,7 @@ from mpest.em.methods.abstract_steps import AMaximization
 from mpest.exceptions import MStepError
 from mpest.utils import ResultWithError, find_file
 
-EResult = tuple[Problem, list[float | None], np.ndarray] | ResultWithError[MixtureDistribution]
+EResult = tuple[Problem, np.ndarray] | ResultWithError[MixtureDistribution]
 
 class LMomentsMStep(AMaximization[EResult]):
     """
@@ -66,11 +66,13 @@ class LMomentsMStep(AMaximization[EResult]):
         if isinstance(e_result, ResultWithError):
             return e_result
 
-        problem, new_priors, indicators = e_result
+        problem, indicators = e_result
 
         samples = problem.samples
 
         mixture = problem.distributions
+
+        new_priors = np.sum(indicators, axis=1) / len(samples)
 
         max_params_count = max(len(d.params) for d in mixture)
         l_moments = np.zeros(shape=[len(mixture), max_params_count])

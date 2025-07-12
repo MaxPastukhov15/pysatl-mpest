@@ -13,7 +13,7 @@ from mpest.models import AModel, AModelDifferentiable
 from mpest.optimizers import AOptimizerJacobian, TOptimizer
 from mpest.utils import ResultWithError
 
-EResult = tuple[Problem, list[float], np.ndarray] | ResultWithError[MixtureDistribution]
+EResult = tuple[Problem, np.ndarray] | ResultWithError[MixtureDistribution]
 
 
 class BayesEStep(AExpectation[EResult]):
@@ -26,6 +26,7 @@ class BayesEStep(AExpectation[EResult]):
         Object constructor which initialiazing private flag which checks if sample is sorted
         """
         self._is_sorted = False 
+
 
     def _set_is_sorted(self, flag: bool) -> None:
         """
@@ -41,7 +42,7 @@ class BayesEStep(AExpectation[EResult]):
         :param problem: Object of class Problem, which contains samples and mixture.
         :return: Return active_samples, matrix with probabilities and problem.
         """
-        
+
         if not self._is_sorted:
             samples = np.sort(problem.samples)
             self._set_is_sorted(True)
@@ -79,12 +80,11 @@ class BayesEStep(AExpectation[EResult]):
 
         if np.isnan(h).any():
             return ResultWithError(problem.distributions, EStepError(""))
-        new_priors = np.sum(h, axis=1) / m
 
         new_problem = Problem(np.array(active_samples),
-                              MixtureDistribution.from_distributions(mixture, new_priors))
+                              MixtureDistribution.from_distributions(mixture))
 
-        return new_problem, new_priors, h
+        return new_problem, h
 
 
 # class ML(AExpectation[EResult]):
@@ -126,7 +126,7 @@ class LikelihoodMStep(AMaximization[EResult]):
         if isinstance(e_result, ResultWithError):
             return e_result
 
-        problem, new_priors, h = e_result
+        problem, h = e_result
         optimizer = self.optimizer
 
         m = len(h[0])
