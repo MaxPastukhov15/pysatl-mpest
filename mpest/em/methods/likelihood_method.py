@@ -21,13 +21,6 @@ class BayesEStep(AExpectation[EResult]):
     Class which represents Bayesian method for calculating matrix for M step in likelihood method
     """
 
-    def __init__(self):
-        """
-        Object construcor for fields which checks if samples are sorted
-        """
-        self._sorted_samples = None
-        self._last_samples_hash = None
-
 
     def step(self, problem: Problem) -> EResult:
         """
@@ -37,13 +30,7 @@ class BayesEStep(AExpectation[EResult]):
         :return: Return active_samples, matrix with probabilities and problem.
         """
 
-        current_hash = hash(problem.samples.tobytes())
-        if self._last_samples_hash != current_hash:
-            self._sorted_samples = np.sort(problem.samples)
-            self._last_samples_hash = current_hash
-        samples = self._sorted_samples
-
-
+        samples = np.sort(problem.samples)
         mixture = problem.distributions
 
         p_xij = []
