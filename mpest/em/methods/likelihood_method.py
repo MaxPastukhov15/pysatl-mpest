@@ -21,6 +21,19 @@ class BayesEStep(AExpectation[EResult]):
     Class which represents Bayesian method for calculating matrix for M step in likelihood method
     """
 
+    def __init__(self):
+        """
+        Object constructor which initialiazing private flag which checks if sample is sorted
+        """
+        self._is_sorted = False 
+
+    def _set_is_sorted(self, flag: bool) -> None:
+        """
+        Setter for flag
+        """
+        _is_sorted =  flag
+
+
     def step(self, problem: Problem) -> EResult:
         """
         A function that performs E step
@@ -28,11 +41,10 @@ class BayesEStep(AExpectation[EResult]):
         :param problem: Object of class Problem, which contains samples and mixture.
         :return: Return active_samples, matrix with probabilities and problem.
         """
-        is_sorted = False #checks if sample is sorted
-
-        if not is_sorted:
+        
+        if not self._is_sorted:
             samples = np.sort(problem.samples)
-            is_sorted = True
+            self._set_is_sorted(True)
         else:
             samples = problem.samples
 
@@ -63,13 +75,7 @@ class BayesEStep(AExpectation[EResult]):
 
             if not swp:
                 return ResultWithError(mixture, ZeroDivisionError())
-
             h[:,  i] = wp / swp
-
-
-        if h.shape == ():
-            error = EStepError("The indicators could not be calculated")
-            return ResultWithError(problem.distributions, error)
 
         if np.isnan(h).any():
             return ResultWithError(problem.distributions, EStepError(""))

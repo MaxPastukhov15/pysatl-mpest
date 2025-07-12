@@ -66,15 +66,9 @@ class LMomentsMStep(AMaximization[EResult]):
         if isinstance(e_result, ResultWithError):
             return e_result
 
-        is_sorted = False #flag for sorting once in algorithm
-
         problem, new_priors, indicators = e_result
 
-        if not is_sorted:
-            samples = np.sort(problem.samples)
-            is_sorted = True
-        else:
-            samples = problem.samples
+        samples = problem.samples
 
         mixture = problem.distributions
 
@@ -98,29 +92,3 @@ class LMomentsMStep(AMaximization[EResult]):
 
         new_mixture = MixtureDistribution.from_distributions(new_distributions, new_priors)
         return ResultWithError(new_mixture)
-
-
-def distribute_numbers_transposed(numbers, mixture: MixtureDistribution):
-    """
-    A function that implements a heuristic for negative elements
-    """
-
-    # TODO: To complete the heuristic approach
-
-    n = len(numbers)
-    m = len(mixture)
-
-    gaussian_indices = [i for i, dist in enumerate(mixture) if dist.model.name == "Gaussian"]
-    gaussian_index = gaussian_indices[0]
-
-    result = np.zeros((m, n))
-
-    for i, num in enumerate(numbers):
-        if num < 0:
-            result[gaussian_index, i] = 1
-        else:
-            uniform_probability = 1 / len(mixture)
-            for j in range(len(mixture)):
-                result[j, i] = uniform_probability
-
-    return result
