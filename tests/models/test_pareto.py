@@ -1,3 +1,5 @@
+import random
+
 import numpy as np
 import pytest
 from hypothesis import assume, given
@@ -65,6 +67,9 @@ class TestPareto:
 
     @given(valid_internal_params())
     def test_generate_normalized(self, params):
+        random.seed(42)
+        np.random.seed(42)
+
         pareto_model = Pareto()
 
         sample_size = 5000
@@ -82,6 +87,9 @@ class TestPareto:
 
     @given(valid_external_params())
     def test_generate_not_normalized(self, params):
+        random.seed(42)
+        np.random.seed(42)
+
         pareto_model = Pareto()
 
         sample_size = 5000

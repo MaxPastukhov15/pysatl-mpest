@@ -1,3 +1,5 @@
+import random
+
 import numpy as np
 import pytest
 from hypothesis import assume, given
@@ -74,6 +76,9 @@ class TestUniform:
 
     @given(valid_params())
     def test_generate_distribution(self, params):
+        random.seed(42)
+        np.random.seed(42)
+
         uniform_model = Uniform()
 
         a, b = params

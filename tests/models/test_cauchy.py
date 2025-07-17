@@ -1,3 +1,5 @@
+import random
+
 import numpy as np
 import pytest
 from hypothesis import given
@@ -65,6 +67,9 @@ class TestCauchy:
 
     @given(valid_internal_params())
     def test_generate_normalized(self, params):
+        random.seed(42)
+        np.random.seed(42)
+
         cauchy_model = Cauchy()
         n_samples = 10000
         samples = cauchy_model.generate(params, size=n_samples)
@@ -84,6 +89,9 @@ class TestCauchy:
 
     @given(valid_external_params())
     def test_generate_not_normalized(self, params):
+        random.seed(42)
+        np.random.seed(42)
+
         x0, gamma = params
         cauchy_model = Cauchy()
         n_samples = 10000

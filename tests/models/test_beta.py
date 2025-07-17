@@ -1,3 +1,5 @@
+import random
+
 import numpy as np
 import pytest
 from hypothesis import given
@@ -74,6 +76,9 @@ class TestBeta:
 
     @pytest.mark.parametrize("mu, nu", [(-0.5, 2.0), (2.0, -0.5), (-1.0, 1.0), (-1.0, -1.0)])
     def test_generate_normalized(self, mu, nu):
+        random.seed(42)
+        np.random.seed(42)
+
         beta_model = Beta()
         params = np.array([mu, nu])
         a, b = np.exp(params)
@@ -89,6 +94,9 @@ class TestBeta:
 
     @pytest.mark.parametrize("a,b", [(0.5, 2.0), (2.0, 0.5), (1.0, 1.0), (5.0, 5.0)])
     def test_generate_not_normalized(self, a, b):
+        random.seed(42)
+        np.random.seed(42)
+
         beta_model = Beta()
         params = np.array([a, b])
 
