@@ -16,8 +16,8 @@ def generate_standart_params(models: list[type[AModel]]) -> list[Distribution]:
             params = [1.0]
         elif m == GaussianModel:
             params = [0.0, 1.0]
-        else:
-            params = [1.0, 1.5]
+        else:  # Weibull
+            params = [1.0, 1.0]
 
         dists.append(Distribution.from_params(m, params))
 
@@ -34,7 +34,7 @@ def generate_uniform_params(models: list[type[AModel]]) -> list[Distribution]:
             params = [uniform(0.1, 5.0)]
         elif m == GaussianModel:
             params = [uniform(-5.0, 5.0), uniform(0.1, 5.0)]
-        else:
+        else:  # Weibull
             params = [uniform(0.1, 5.0), uniform(0.1, 5.0)]
 
         dists.append(Distribution.from_params(m, params))
