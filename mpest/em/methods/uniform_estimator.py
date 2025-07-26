@@ -59,15 +59,15 @@ class UniformMStep(AMaximization):
                 continue
 
             # ML estimates for uniform are min and max of assigned samples
-            a = max(np.min(weighted_samples), dist.params[0] - 0.1)
-            b = min(np.max(weighted_samples), dist.params[1] + 0.1)
+            a = np.min(weighted_samples)
+            b = np.max(weighted_samples)
 
-            # Ensure valid parameters (a < b)
+            
             if a >= b:
-                a, b = dist.params[0], dist.params[1]
+                a = (dist.params[0] + dist.params[1]) / 2 - 0.05 
+                b = (dist.params[0] + dist.params[1]) / 2 + 0.05
 
-            prior = np.mean(resp) * (1 + (0.1 / (i + 1)))
-
+            prior = np.mean(resp) 
             new_dist = DistributionInMixture(dist.model, np.array([a, b], dtype=np.float64), prior)
             new_distributions.append(new_dist)
 
@@ -82,7 +82,7 @@ class UniformLMomentsMStep(AMaximization):
 
     def _calculate_lmoments(self, samples: np.ndarray, weights: np.ndarray) -> tuple[float, float] | None:
         """Calculate first two L-moments from weighted samples"""
-        if len(samples) == 0:
+        if len(samples) < 2:
             return None
 
         # Sort samples and corresponding weights
@@ -94,9 +94,9 @@ class UniformLMomentsMStep(AMaximization):
         sorted_weights = sorted_weights / np.sum(sorted_weights)
 
         # Calculate probability weighted moments
-        n = len(sorted_samples)
+        cum_weights = np.cumsum(sorted_weights)
         b0 = np.sum(sorted_weights * sorted_samples)
-        b1 = np.sum(sorted_weights * sorted_samples * np.arange(n) / (n - 1))
+        b1 = np.sum(sorted_weights * (1 - cum_weights + sorted_weights / 2) * sorted_samples)
 
         # Convert to L-moments
         l1 = b0

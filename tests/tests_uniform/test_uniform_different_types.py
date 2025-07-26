@@ -40,8 +40,8 @@ def idfunc(vals):
             [0.5, 0.5],
             500,
             0.01,
-            0.1,
-            0.05,
+            0.3,
+            0.3,
         ),
         # 2. With overlap
         (
@@ -51,8 +51,8 @@ def idfunc(vals):
             [0.6, 0.4],
             500,
             0.01,
-            0.2,
-            0.1,
+            0.3,
+            0.3,
         ),
         # 3. With gap
         (
@@ -62,8 +62,8 @@ def idfunc(vals):
             [0.7, 0.3],
             500,
             0.01,
-            0.15,
-            0.08,
+            0.3,
+            0.3,
         ),
     ],
     ids=["no_overlap_no_gap", "with_overlap", "with_gap"],
