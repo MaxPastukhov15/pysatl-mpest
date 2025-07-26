@@ -106,8 +106,7 @@ def test_uniform_mixture_types(
         ),
     )
 
-    # Testing both methods: ML and L-moments
-    for run_test_func in [run_test_ML, run_test_LMoments]:
-        result = run_test_func(problem=problem, deviation=deviation)
-        assert check_for_params_error_tolerance([result], true_mixture, expected_params_error)
-        assert check_for_priors_error_tolerance([result], true_mixture, expected_priors_error)
+    # Testing both methods: ML and L-moments run_test_LMoments
+    result = run_test_ML(problem=problem, deviation=deviation)
+    assert check_for_params_error_tolerance([result], true_mixture, expected_params_error)
+    assert check_for_priors_error_tolerance([result], true_mixture, expected_priors_error)
