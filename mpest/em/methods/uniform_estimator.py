@@ -62,12 +62,12 @@ class UniformMStep(AMaximization):
             a = np.min(weighted_samples)
             b = np.max(weighted_samples)
 
-            
+
             if a >= b:
-                a = (dist.params[0] + dist.params[1]) / 2 - 0.05 
+                a = (dist.params[0] + dist.params[1]) / 2 - 0.05
                 b = (dist.params[0] + dist.params[1]) / 2 + 0.05
 
-            prior = np.mean(resp) 
+            prior = np.mean(resp)
             new_dist = DistributionInMixture(dist.model, np.array([a, b], dtype=np.float64), prior)
             new_distributions.append(new_dist)
 
@@ -82,7 +82,7 @@ class UniformLMomentsMStep(AMaximization):
 
     def _calculate_lmoments(self, samples: np.ndarray, weights: np.ndarray) -> tuple[float, float] | None:
         """Calculate first two L-moments from weighted samples"""
-        if len(samples) < 2:
+        if len(samples) == 0:
             return None
 
         # Sort samples and corresponding weights
