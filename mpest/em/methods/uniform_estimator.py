@@ -62,7 +62,6 @@ class UniformMStep(AMaximization):
             a = np.min(weighted_samples)
             b = np.max(weighted_samples)
 
-
             if a >= b:
                 a = (dist.params[0] + dist.params[1]) / 2 - 0.05
                 b = (dist.params[0] + dist.params[1]) / 2 + 0.05
