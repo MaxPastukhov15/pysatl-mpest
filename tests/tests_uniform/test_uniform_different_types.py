@@ -12,7 +12,7 @@ from mpest.core.problem import Problem
 from mpest.models import AModelWithGenerator, Uniform
 from mpest.utils import Factory
 
-from tests.tests_uniform.uniform_utils import run_test_LMoments, run_test_ML
+from tests.tests_uniform.uniform_utils import run_test_ML
 from tests.utils import (
     check_for_params_error_tolerance,
     check_for_priors_error_tolerance,
